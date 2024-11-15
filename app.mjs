@@ -1,7 +1,15 @@
-const a = -1;
-if (a >= 0) {
-	const log = require('./characters.mjs');
-	log();
-} else {
-	console.log('Меньше 0');
+// import log, { characters, greet as hello} from './characters.mjs';
+
+async function main() {
+	try {
+		const { characters, greet } = await import('./characters.mjs')
+		for (const c of characters) {
+			reet(c);
+		}
+	} catch (e) {
+		console.log('Ошибка');
+	}
 }
+main();
+
+
