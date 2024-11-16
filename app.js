@@ -1,4 +1,4 @@
-const EventEmitter = require('events'); // Events Emitter
+const EventEmitter = require('events'); // Устройство Node.js
 
 const myEmitter = new EventEmitter();
 
