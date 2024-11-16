@@ -19,3 +19,9 @@ myEmitter.on('msg', (data) => {
 	console.log(`Получил: ${data}`);
 });
 myEmitter.emit('msg', 'Привет! Получи моё сообщение!');
+
+myEmitter.once('off', () => {
+	console.log('Я вызвался только 1 раз и не больше');
+});
+myEmitter.emit('off');
+myEmitter.emit('off');
