@@ -18,6 +18,9 @@ myEmitter.emit('connected');
 myEmitter.on('msg', (data) => {
 	console.log(`Получил: ${data}`);
 });
+myEmitter.prependListener('msg', (data) => {
+	console.log('Prepend');
+});
 myEmitter.emit('msg', 'Привет! Получи моё сообщение!');
 
 myEmitter.once('off', () => {
@@ -25,3 +28,18 @@ myEmitter.once('off', () => {
 });
 myEmitter.emit('off');
 myEmitter.emit('off');
+
+
+console.log(myEmitter.getMaxListeners());
+myEmitter.setMaxListeners(1);
+console.log(myEmitter.getMaxListeners());
+console.log(myEmitter.listenerCount('msg>'));
+console.log(myEmitter.listenerCount('off'));
+console.log(myEmitter.listeners('msg'));
+console.log(myEmitter.eventNames());
+
+// myEmitter.on('error', (err) => {
+// 	console.log(`Произошла ошибка: ${err.message}`);
+// });
+
+myEmitter.emit('error', new Error('Произошла ошибка! Boom!'));
