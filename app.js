@@ -38,8 +38,19 @@ console.log(myEmitter.listenerCount('off'));
 console.log(myEmitter.listeners('msg'));
 console.log(myEmitter.eventNames());
 
-// myEmitter.on('error', (err) => {
-// 	console.log(`Произошла ошибка: ${err.message}`);
-// });
+myEmitter.on('error', (err) => {
+	console.log(`Произошла ошибка: ${err.message}`);
+});
 
 myEmitter.emit('error', new Error('Произошла ошибка! Boom!'));
+
+
+
+const target = new EventTarget();
+
+const logTarget = () => {
+	console.log('Connected to target');
+}
+
+target.addEventListener('connected', logTarget);
+target.dispatchEvent(new Event('connected'));
