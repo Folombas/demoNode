@@ -1,3 +1,3 @@
-// Global variables of Node.js
-console.log(require)
+// Events Emitter
+	const EventEmitter = require('events');
 
