@@ -1,48 +1,34 @@
-// const start = performance.now(); // Timers
-// setTimeout(() => {
-// 	console.log(performance.now() - start);
-// 	console.log('Прошла секунда');
-// }, 1000)
+const fs = require('fs');
 
-// function myFunc(arg) {
-// 	console.log(`Аргумент => ${arg}`);
-// }
+console.log('Init'); // example Event Loop work
 
-// setTimeout(myFunc, 1500, 'Классный');
-
-// const timerId = setTimeout(() => {
-// 	console.log('BOOOM!');
-// }, 5000)
-
-// setTimeout(() => {
-// 	clearTimeout(timerId);
-// 	console.log('Очищено');
-// }, 1000)
-
-
-// const intervalId = setInterval(() => {
-// 	console.log(performance.now());
-// }, 1000);
-
-// setTimeout(() => {
-// 	clearInterval(intervalId);
-// 	console.log('Очищено');
-// }, 5000)
-
-// console.log('Перед');
-
-// setImmediate(() => {
-// 	console.log('После всего');
-// });
-
-// console.log('После');
-
-const timerId = setTimeout(() => {
-	console.log('BOOOM!');
-}, 5000)
-
-timerId.unref();
+setTimeout(() => {
+	console.log(performance.now(), 'Timer 0');
+}, 100);
 
 setImmediate(() => {
-	timerId.ref();
+	console.log('Immediate');
 });
+
+fs.readFile(__filename, () => {
+	console.log('File readed');
+});
+
+setTimeout(() => {
+	for (let i = 0; i < 1000000000; i++) {
+
+	}
+	console.log('Done');
+	Promise.resolve().then(() => {
+		console.log('Promise inside timeout');
+	});
+	process.nextTick(() => console.log('tick inside timeout'));
+}, 0);
+
+Promise.resolve().then(() => {
+	console.log('Promise');
+});
+
+process.nextTick(() => console.log('tick'));
+
+console.log('Final');
