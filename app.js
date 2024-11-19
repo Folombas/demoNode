@@ -1,34 +1,15 @@
-const fs = require('fs');
+const a = 5;// Stack вызовов
 
-console.log('Init'); // example Event Loop work
+function b() {
+	return c();
+}
 
-setTimeout(() => {
-	console.log(performance.now(), 'Timer 0');
-}, 100);
+function c() {
+	return d();
+}
 
-setImmediate(() => {
-	console.log('Immediate');
-});
+function d() {
+	console.log(a);
+}
 
-fs.readFile(__filename, () => {
-	console.log('File readed');
-});
-
-setTimeout(() => {
-	for (let i = 0; i < 1000000000; i++) {
-
-	}
-	console.log('Done');
-	Promise.resolve().then(() => {
-		console.log('Promise inside timeout');
-	});
-	process.nextTick(() => console.log('tick inside timeout'));
-}, 0);
-
-Promise.resolve().then(() => {
-	console.log('Promise');
-});
-
-process.nextTick(() => console.log('tick'));
-
-console.log('Final');
+b();
