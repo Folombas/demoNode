@@ -1,56 +1,48 @@
-const EventEmitter = require('events'); // Устройство Node.js
+// const start = performance.now(); // Timers
+// setTimeout(() => {
+// 	console.log(performance.now() - start);
+// 	console.log('Прошла секунда');
+// }, 1000)
 
-const myEmitter = new EventEmitter();
+// function myFunc(arg) {
+// 	console.log(`Аргумент => ${arg}`);
+// }
 
-const logDbConnection = () => {
-	console.log('DB Connected');
-};
+// setTimeout(myFunc, 1500, 'Классный');
 
-myEmitter.addListener('connection', logDbConnection);
-myEmitter.emit('connection');
+// const timerId = setTimeout(() => {
+// 	console.log('BOOOM!');
+// }, 5000)
+
+// setTimeout(() => {
+// 	clearTimeout(timerId);
+// 	console.log('Очищено');
+// }, 1000)
 
 
-myEmitter.removeListener('connection', logDbConnection);
-// myEmitter.off('connection', logDbConnection);
-// myEmitter.removeAllListeners('connected')
-myEmitter.emit('connected');
+// const intervalId = setInterval(() => {
+// 	console.log(performance.now());
+// }, 1000);
 
-myEmitter.on('msg', (data) => {
-	console.log(`Получил: ${data}`);
+// setTimeout(() => {
+// 	clearInterval(intervalId);
+// 	console.log('Очищено');
+// }, 5000)
+
+// console.log('Перед');
+
+// setImmediate(() => {
+// 	console.log('После всего');
+// });
+
+// console.log('После');
+
+const timerId = setTimeout(() => {
+	console.log('BOOOM!');
+}, 5000)
+
+timerId.unref();
+
+setImmediate(() => {
+	timerId.ref();
 });
-myEmitter.prependListener('msg', (data) => {
-	console.log('Prepend');
-});
-myEmitter.emit('msg', 'Привет! Получи моё сообщение!');
-
-myEmitter.once('off', () => {
-	console.log('Я вызвался только 1 раз и не больше');
-});
-myEmitter.emit('off');
-myEmitter.emit('off');
-
-
-console.log(myEmitter.getMaxListeners());
-myEmitter.setMaxListeners(1);
-console.log(myEmitter.getMaxListeners());
-console.log(myEmitter.listenerCount('msg>'));
-console.log(myEmitter.listenerCount('off'));
-console.log(myEmitter.listeners('msg'));
-console.log(myEmitter.eventNames());
-
-myEmitter.on('error', (err) => {
-	console.log(`Произошла ошибка: ${err.message}`);
-});
-
-myEmitter.emit('error', new Error('Произошла ошибка! Boom!'));
-
-
-
-const target = new EventTarget();
-
-const logTarget = () => {
-	console.log('Connected to target');
-}
-
-target.addEventListener('connected', logTarget);
-target.dispatchEvent(new Event('connected'));
