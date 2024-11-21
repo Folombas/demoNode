@@ -1,20 +1,30 @@
-const crypto = require('crypto'); // Worker threads
-const https = require('https');
-const start = performance.now();
+const perf_hooks = require('perf_hooks'); //Измерение производительности
 
-process.env.UV_THREADPOOL_SIZE = 8;
+test = perf_hooks.performance.timerify(test);
 
-// for(let i = 0; i < 50; i++) {
-// 	crypto.pbkdf2('test', 'salt', 100000, 64, 'sha512', () => {
-// 		console.log(performance.now() - start);
-// 	});
-// }
+const performanceObserver = new perf_hooks.PerformanceObserver((items, observer) => {
+	console.log(items.getEntries());
+	const entry = items.getEntriesByName('slow').pop();
+	console.log(`${entry.name}: ${entry.duration}`);
+	observer.disconnect();
+});
+performanceObserver.observe({ entryTypes: ['measure', 'function'] });
 
-for(let i = 0; i < 50; i++) {
-	https.get('https://www.yandex.ru', (res) => {
-		res.on('data', () => { });
-		res.on('end', () => { 
-			console.log(performance.now() - start);
-		});
-	});
+function test() {
+	const arr = [];
+	for (let i = 0; i < 10000000; i++) {
+		arr.push(i * i);
+	}
 }
+function slow() {
+	performance.mark('start');
+	const arr = [];
+	for(let i = 0; i < 10000000; i++) {
+		arr.push(i*i);
+	}
+	performance.mark('end');
+	performance.measure('slow', 'start', 'end');
+}
+
+slow();
+test();
