@@ -1,30 +1,15 @@
-const perf_hooks = require('perf_hooks'); //Измерение производительности
+const { spawn } = require('child_process'); //spawn ana exec
 
-test = perf_hooks.performance.timerify(test);
+const childProcess = spawn('ls') ;
 
-const performanceObserver = new perf_hooks.PerformanceObserver((items, observer) => {
-	console.log(items.getEntries());
-	const entry = items.getEntriesByName('slow').pop();
-	console.log(`${entry.name}: ${entry.duration}`);
-	observer.disconnect();
-});
-performanceObserver.observe({ entryTypes: ['measure', 'function'] });
+childProcess.stdout.on('data', (data) => {
+	console.log(`Stdout: ${data}`)
+})
 
-function test() {
-	const arr = [];
-	for (let i = 0; i < 10000000; i++) {
-		arr.push(i * i);
-	}
-}
-function slow() {
-	performance.mark('start');
-	const arr = [];
-	for(let i = 0; i < 10000000; i++) {
-		arr.push(i*i);
-	}
-	performance.mark('end');
-	performance.measure('slow', 'start', 'end');
-}
+childProcess.stderr.on('data', (data) => {
+	console.log(`Stderror: ${data}`)
+})
 
-slow();
-test();
+childProcess.on('exit', (code) => {
+	console.log(`Код выхода: ${code}`)
+})
