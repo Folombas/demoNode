@@ -1,15 +1,20 @@
-const a = 5;// Stack вызовов
+const crypto = require('crypto'); // Worker threads
+const https = require('https');
+const start = performance.now();
 
-function b() {
-	return c();
+process.env.UV_THREADPOOL_SIZE = 8;
+
+// for(let i = 0; i < 50; i++) {
+// 	crypto.pbkdf2('test', 'salt', 100000, 64, 'sha512', () => {
+// 		console.log(performance.now() - start);
+// 	});
+// }
+
+for(let i = 0; i < 50; i++) {
+	https.get('https://www.yandex.ru', (res) => {
+		res.on('data', () => { });
+		res.on('end', () => { 
+			console.log(performance.now() - start);
+		});
+	});
 }
-
-function c() {
-	return d();
-}
-
-function d() {
-	console.log(a);
-}
-
-b();
